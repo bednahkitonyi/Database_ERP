@@ -1,24 +1,138 @@
-create database Ecommercedb;
+create database e_commercedb;
 
-use ecommercedb;
+use e_commercedb;
 
--- Creating the different tables
+-- Creating the tables
 
-create table product(productid int primary key	auto_increment,productname varchar(255), categoryid int, supplierid int, price decimal, stockquantity int, reorderlevel int, barcode varchar(100), productweight decimal,createdat timestamp,updatedat timestamp, imageurl varchar(255));
-create table productcategory(CategoryID int primary key auto_increment,CategoryName varchar(255), CreatedAt timestamp, UpdatedAt timestamp, Status enum('active', 'inactive'));
-create table  productitem(ItemID int primary key auto_increment, ProductID int, BatchNumber	varchar(100), SerialNumber varchar(100), Color varchar(50),Quantity_On_Hand	int, CostPrice decimal,SalePrice decimal, ExpiryDate date,CreatedAt timestamp, UpdatedAt timestamp, Status enum('Available', 'Reserved', 'Sold', 'Inactive'));
-create table brand(BrandID int primary key	auto_increment, BrandName varchar(255), BrandDescription text, Country_Of_Origin varchar(100), CreatedAt timestamp, UpdatedAt timestamp);
-create table productVariation(VariationID int primary key auto_increment, ProductID	int, VariationName varchar(255),Color varchar(50),Size varchar(50),Material varchar(100),Style varchar(100),Price decimal(10, 2), StockQuantity int,CreatedAt timestamp, UpdatedAt timestamp,Status ENUM('Active', 'Inactive'));	
-create table sizecategory(SizeCategoryID int primary key auto_increment,SizeCategoryName varchar(100), Unit varchar(50),CreatedAt timestamp,UpdatedAt timestamp, Status ENUM('Active', 'Inactive'));
-create table  sizeoption(Sizeid int primary key auto_increment, SizeCategoryID int, SizeLabel varchar(50),SizeValue decimal,CreatedAt timestamp, UpdatedAt timestamp, Status ENUM('Active', 'Inactive'));
-create table productimage(ImageID int primary key auto_increment,ProductID int, VariationID int,ImageURL varchar(255), AltText varchar(255), IsPrimary boolean,CreatedAt timestamp, UpdatedAt timestamp, Status ENUM('Active', 'Inactive'));
-create table color(ColorID int primary key auto_increment, ColorName varchar(100),Createdat timestamp, UpdatedAt timestamp, Status ENUM('Active', 'Inactive'));
-create table productattribute(AttributeID int primary key auto_increment, AttributeName varchar(100), Unit varchar(50), IsVariant boolean, CreatedAt timestamp,UpdatedAt timestamp, Status ENUM('Active', 'Inactive'));
-create table  attributecategory(AttributeCategoryID	int primary key auto_increment, CategoryName varchar(100), CreatedAt timestamp, UpdatedAt timestamp, Status ENUM('Active', 'Inactive'));
-create table attributetype (AttributeTypeID int primary key auto_increment, TypeName varchar(100), CreatedAt timestamp, Updatedat timestamp, status ENUM('Active', 'Inactive'));
+-- Products table
+create table products(
+    productID INT AUTO_INCREMENT PRIMARY KEY,
+    productName varchar(255), 
+    categoryID INT, 
+    supplierID INT, 
+    price decimal, 
+    stockQuantity INT, 
+    reorderLevel INT, 
+    barcode varchar(100), 
+    productWeight decimal,
+    createdAt timestamp,
+    updatedAt timestamp, 
+    imageUrl varchar(255));
+
+-- Product category table
+create table productCategory(
+    categoryID INT AUTO_INCREMENT PRIMARY KEY,
+    categoryName varchar(255), 
+    createdAt timestamp, 
+    updatedAt timestamp, 
+    Status enum('active', 'inactive'));
+
+-- Product item table
+create table  productItem(
+    itemID INT AUTO_INCREMENT PRIMARY KEY, 
+    productID INT, 
+    batchNumber	varchar(100), 
+    serialNumber varchar(100), 
+    color varchar(50),
+    quantity_On_Hand INT, 
+    costPrice decimal,
+    salePrice decimal, 
+    expiryDate date,
+    createdAt timestamp, 
+    updatedAt timestamp, 
+    status enum('Available', 'Reserved', 'Sold', 'Inactive'));
+
+-- Brand table
+create table brand(
+    brandID INT AUTO_INCREMENT PRIMARY KEY, 
+    brandName varchar(255), 
+    brandDescription text, 
+    country_Of_Origin varchar(100), 
+    createdAt timestamp, 
+    updatedAt timestamp);
+
+-- Product variation table 
+create table productVariation(
+    variationID INT AUTO_INCREMENT PRIMARY KEY, 
+    productID INT, 
+    variationName varchar(255),
+    color varchar(50),
+    size varchar(50),
+    material varchar(100),
+    style varchar(100),
+    price decimal(10, 2), 
+    stockQuantity INT,
+    createdAt timestamp, 
+    updatedAt timestamp,
+    status ENUM('Active', 'Inactive'));
+
+-- Size category table
+create table sizeCategory(
+    sizeCategoryID INT AUTO_INCREMENT PRIMARY KEY,
+    sizeCategoryName varchar(100), 
+    unit varchar(50),
+    createdAt timestamp,
+    updatedAt timestamp, 
+    status ENUM('Active', 'Inactive'));
+
+-- Size option table
+create table  sizeOption(
+    sizeID INT AUTO_INCREMENT PRIMARY KEY, 
+    sizeCategoryID INT, 
+    sizeLabel varchar(50),
+    sizeValue decimal,
+    createdAt timestamp, 
+    updatedAt timestamp, 
+    status ENUM('Active', 'Inactive'));
+
+-- Product image table
+create table productImage(
+    imageID INT AUTO_INCREMENT PRIMARY KEY,
+    productID INT, 
+    variationID INT,
+    imageURL varchar(255), 
+    altText varchar(255), 
+    isPrimary boolean,
+    createdAt timestamp, 
+    updatedAt timestamp, 
+    status ENUM('Active', 'Inactive'));
+
+-- Color table
+create table color(
+    colorID INT AUTO_INCREMENT PRIMARY KEY, 
+    colorName varchar(100),
+    createdAt timestamp, 
+    updatedAt timestamp, 
+    status ENUM('Active', 'Inactive'));
+
+-- Product attribute table
+create table productAttribute(
+    attributeID INT AUTO_INCREMENT PRIMARY KEY, 
+    attributeName varchar(100), 
+    unit varchar(50), 
+    isVariant boolean, 
+    createdAt timestamp,
+    updatedAt timestamp, 
+    status ENUM('Active', 'Inactive'));
+
+-- Attribute category table
+create table  attributeCategory(
+    attributeCategoryID	INT AUTO_INCREMENT PRIMARY KEY, 
+    categoryName varchar(100), 
+    createdAt timestamp, 
+    updatedAt timestamp, 
+    status ENUM('Active', 'Inactive'));
+
+-- Attribute type table
+create table attributeType (
+    attributeTypeID INT AUTO_INCREMENT PRIMARY KEY, 
+    typeName varchar(100), 
+    createdAt timestamp, 
+    updatedAt timestamp, 
+    status ENUM('Active', 'Inactive'));
 
 -- inserting sample data into the product table
-insert into product(productname,categoryid,supplierid,price,stockquantity,reorderlevel, barcode,productweight,createdat,updatedat,imageurl)
+insert into products(productName,categoryID,supplierID,price,stockQuantity,reorderLevel, barcode,productWeight,createdAt,updatedAt,imageUrl)
 values("Wireless Mouse", 223, 1112,125.50, 678, 100, 12354645,0.05,"2024-12-01 10:00:00", "2025-01-15 08:30:00","https://cdn.example.com/products/wireless_mouse_front.jp"),
 ("Bluetooth Headphones", 123, 1212,150.50, 1000, 250, 11354745,0.5,"2024-12-01 11:00:00", "2025-01-16 08:30:00", "	https://cdn.example.com/products/wireless_mouse_side.jpg"),
 ("Cotton T-Shirt", 234, 5612,25.50, 800, 150, 12358945,0.005,"2024-12-06 10:00:00", "2025-01-19 08:30:00","https://cdn.example.com/products/tshirt_white_front.jpg"),
@@ -28,7 +142,7 @@ values("Wireless Mouse", 223, 1112,125.50, 678, 100, 12354645,0.05,"2024-12-01 1
 
 -- -- inserting sample data into the product_category table
 
-insert into product_category(categoryname,createdat, updatedat, status)
+insert into productCategory(categoryName,createdAt, updatedAt, status)
 values("Electronics","	2024-12-01 10:00:00","2025-01-01 10:00:00","Active"),
 ("Computer Accessories", "2024-12-01 10:05:00","2025-01-01 10:05:00","Active"),
 ("Audio Equipment","2024-12-01 10:10:00", "2025-01-01 10:10:00","Active"),
@@ -38,7 +152,7 @@ values("Electronics","	2024-12-01 10:00:00","2025-01-01 10:00:00","Active"),
 ("Food & Bakery", "2024-12-01 11:45:00","2025-01-01 11:45:00","Active");
 
 -- inserting sample data into the productitem table
-insert into productitem(productid, batchnumber, serialnumber, color, quantity_on_hand, costprice, saleprice, expirydate, createdat,updatedat, status)
+insert into productItem(productID, batchNumber, serialNumber, color, quantity_On_Hand, costPrice, salePrice, expiryDate, createdAt,updatedAt, status)
 values(1, "B-WM-2025-01", "SN-WM001-BLK-0001", "Blue", 301, 12.25, 15.10, null, "2024-12-01 10:00:00", "2025-01-05 08:30:00", "available"),
 (2,"B-TSH-2025-01", "SN-TSH-M-345678", "Green", 450, 7.00, 19.99, null, "2025-01-10 12:00:00", "2025-02-01 10:15:00", "available"),
 (5,"B-DL-2024-11", "SN-DL-99887766","red", 356, 20.00,39.95, null, "2024-11-20 13:00:00", "2025-01-01 07:00:00", "available"),
@@ -46,7 +160,7 @@ values(1, "B-WM-2025-01", "SN-WM001-BLK-0001", "Blue", 301, 12.25, 15.10, null, 
 
 -- inserting sample data into the brand table
 
-insert into brand(brandname, branddescription,country_of_origin,createdat,updatedat)
+insert into brand(brandName, brandDescription,country_Of_Origin,createdAt,updatedAt)
 values("Logitech", "Electronics and computer gear", "Switzerland","2024-12-01 09:00:00", "2025-01-01 10:00:00"),
 ("Nike", "Sportswear and athletic products", "USA","2024-12-01 09:30:00", "2025-01-01 10:00:00"),
 ("Beacome","Durable lifestyle accessories","Canada","2024-12-01 10:00:00","2025-04-01 08:00:00"),
@@ -54,25 +168,25 @@ values("Logitech", "Electronics and computer gear", "Switzerland","2024-12-01 09
 ("GlowLite","	Home lighting and fixtures", "Germany", "2025-01-15 08:30:00","2025-04-01 08:30:00");
 
 -- inserting sample data into the productVariation table
-insert into productVariation(productid, variationname, color, size,material, style, price, stockquantity, createdat, updatedat,status)
+insert into productVariation(productID, variationName, color, size, material, style, price, stockQuantity, createdAt, updatedAt, status)
 values(1,"Black Wireless Mouse","black",null, "Plastic", null, 45.86, 345,"2024-12-01 10:00:00", "2025-01-01 10:00:00", "Active"),
 (1,"Blue Wireless Mouse","blue",null, "plastic",null, 46.67, 345,"2024-12-01 10:00:00","2025-01-01 10:00:00","Active"),
 (3, "Black Medium T-Shirt","Black","L","Cotton","slim fit",50.00,250,"2025-01-10 12:00:00","2025-02-01 12:00:00", "Active"),
 (4,"Black Large T-Shirt","Black","M","Cotton", "loose",55.50,560,"2025-01-10 12:00:00","2025-02-01 12:00:00","Active"),
-(5,"Black XL T-Shir","Black", "XL","Cotton","loose",55.67,600,"2025-01-10 12:00:00","2025-02-01 12:00:00","Active");
+(5,"Black XL T-Shirt","Black", "XL","Cotton","loose",55.67,600,"2025-01-10 12:00:00","2025-02-01 12:00:00","Active");
 
 
--- inserting sample data into the  sizecategory table
+-- inserting sample data into the  size category table
 
-insert into sizecategory(sizecategoryname, unit, createdat, updatedat, status)
+insert into sizeCategory(sizeCategoryName, unit, createdAt, updatedAt, status)
 values("Clothing", 345, "2024-12-01 09:00:00", "2025-01-01 09:00:00","Active"),
 ("Footwear",456,"2024-12-01 09:10:00","2025-01-01 09:10:00","Active"),
 ("Beverage", 230,"2024-12-01 09:20:00","2025-01-01 09:20:00", "Active"),
 ("Electronics",560, "2024-12-01 09:30:00","2025-01-01 09:30:00","ACtive"),
 ("Bakery",120, "2024-12-01 09:40:00","2025-01-01 09:40:00","Active");
 
--- inserting sample data into the sizeoption table
-insert into sizeoption(sizecategoryid,sizelabel,sizevalue, createdat,updatedat, status)
+-- inserting sample data into the size option table
+insert into sizeOption(sizeCategoryID,sizeLabel,sizeValue, createdAt,updatedAt, status)
 values(1,"Small",null,"2025-01-01 10:00:00","2025-01-01 10:00:00","Active"),
 (1,"medium",null,"2025-01-01 10:00:00","2025-01-01 10:00:00","Active"),
 (2,"US 8",8,"2025-01-01 10:01:00","2025-01-01 10:01:00","Active"),
@@ -81,8 +195,8 @@ values(1,"Small",null,"2025-01-01 10:00:00","2025-01-01 10:00:00","Active"),
 (5,"15.6 Inch",15.60,"2025-01-01 10:03:00","2025-01-01 10:03:00","Active"),
 (6,"Loaf",1.00,"2025-01-01 10:04:00","2025-01-01 10:04:00","Active");
 
--- inserting sample data into the productimage table
-insert into productimage(productid,variationid,imageurl,alttext,isprimary,createdat,updatedat, status)
+-- inserting sample data into the product image table
+insert into productImage(productID,variationID,imageUrl,altText,isPrimary,createdAt,updatedAt, status)
 values(1,101,"https://images.unsplash.com/photo-1585238342028-3d9d2f9b9b3b","Loaf of bread",true,"2025-04-20 09:00:00","2025-04-20 09:00:00","Active"),
 (2,102,"https://images.unsplash.com/photo-1600185363361-b1e1c43bca7a","Plain white T-shirt",true,"2025-04-20 09:01:00","2025-04-20 09:01:00","Active"),
 (3,103,"https://images.unsplash.com/photo-1526178619322-6fa77cb2f87d","Red running shoes",true,"2025-04-20 09:02:00","2025-04-20 09:02:00","active"),
@@ -90,7 +204,7 @@ values(1,101,"https://images.unsplash.com/photo-1585238342028-3d9d2f9b9b3b","Loa
 (5,105,"https://images.unsplash.com/photo-1542291026-7eec264c27ff","Smartphone with apps", true,"2025-04-20 09:03:00","2025-04-20 09:03:00","active");
 
 -- inserting sample data into the color table
-insert into color(colorname,createdat,updatedat,status)
+insert into color(colorName, createdAt, updatedAt, status)
 values("Pink","2025-04-21 10:08:00","2025-04-21 10:08:00","inactive"),
 ("Red","2025-04-21 10:00:00","2025-04-21 10:00:00","active"),
 ("Blue","2025-04-21 10:01:00","2025-04-21 10:01:00","active"),
@@ -101,24 +215,24 @@ values("Pink","2025-04-21 10:08:00","2025-04-21 10:08:00","inactive"),
 ("Gray","2025-04-21 10:06:00","2025-04-21 10:06:00","active"),
 ("Orange","2025-04-21 10:07:00","2025-04-21 10:07:00","active");
 
--- inserting sample data into the productattribute table
-insert into productattribute(attributename,unit,isvariant,createdat,updatedat,status)
+-- inserting sample data into the product attribute table
+insert into productAttribute(attributeName,unit,isVariant,createdAt,updatedAt,status)
 values("weight","g",false,"2025-04-21 10:20:00","2025-04-21 10:20:00","active"),
 ("Material","NA",true,"	2025-04-21 10:21:00","2025-04-21 10:21:00","active"),
 ("Sole Type","NA",true,"2025-04-21 10:22:00","2025-04-21 10:22:00","active"),
 ("Screen Size","inch",false,"2025-04-21 10:23:00","2025-04-21 10:23:00","active"),
 ("RAM","gb",true,"2025-04-21 10:24:00","2025-04-21 10:24:00","active");
 
--- inserting sample data into the attributecategory table
-insert into attributecategory(categoryname,createdat,updatedat,status)
+-- inserting sample data into the attribute category table
+insert into attributeCategory(categoryName,createdAt,updatedAt,status)
 values("Physical","2025-04-21 11:00:00","2025-04-21 11:00:00","active"),
 ("Material","2025-04-21 11:01:00","2025-04-21 11:01:00","active"),
 ("Technical","2025-04-21 11:02:00","2025-04-21 11:02:00","active"),
 ("Appearance","2025-04-21 11:03:00","2025-04-21 11:03:00","active"),
 ("Packaging","2025-04-21 11:04:00","2025-04-21 11:04:00","active");
 
--- inserting sample data into the attributetype table
-insert into attributetype(Typename,createdat,updatedat,status)
+-- inserting sample data into the attribute type table
+insert into attributeType(typeName,createdAt,updatedAt,status)
 values("Weight","2025-04-21 11:10:00","2025-04-21 11:10:00","active"),
 ("Length","2025-04-21 11:11:00","2025-04-21 11:11:00","active"),
 ("Material","2025-04-21 11:12:00","2025-04-21 11:12:00","active"),
