@@ -24,7 +24,7 @@ To design and implement an e-commerce database collaboratively that:
 ## 🧠 Technologies Used
 
 - 🐬 **MySQL** 
-- 🧱 ERD Design Tools: *dbdiagram.io*, *Lucidchart*, *draw.io*
+- 🧱 ERD Design Tool: *dbdiagram.io*
 
 ---
 
@@ -58,6 +58,7 @@ The ERD below shows how entities are interrelated in the system.
 ## 📊 Entity Relationship Diagram (ERD)
 
 > 🖼️ *Below is the ERD diagram for the E-Commerce Database*
+> *dbdiagram.io* [ERD Diagram Link](https://dbdiagram.io/d/E-Commerce-Database-680950321ca52373f519e3ac)
 
 ![ERD Diagram](./assets/erd-diagram.png)
 
