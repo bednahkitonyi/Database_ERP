@@ -4,143 +4,171 @@ use e_commercedb;
 
 -- Creating the tables
 
--- Products table
-create table products(
-    productID INT AUTO_INCREMENT PRIMARY KEY,
-    productName varchar(255), 
-    categoryID INT, 
-    supplierID INT, 
-    price decimal, 
-    stockQuantity INT, 
-    reorderLevel INT, 
-    barcode varchar(100), 
-    productWeight decimal,
-    createdAt timestamp,
-    updatedAt timestamp, 
-    imageUrl varchar(255));
-
 -- Product category table
 create table productCategory(
     categoryID INT AUTO_INCREMENT PRIMARY KEY,
-    categoryName varchar(255), 
-    createdAt timestamp, 
-    updatedAt timestamp, 
-    Status enum('active', 'inactive'));
+    categoryName varchar(255),
+    createdAt timestamp DEFAULT CURRENT_TIMESTAMP,
+    updatedAt timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    Status enum('active', 'inactive')
+);
+
+-- Products table
+create table products(
+    productID INT AUTO_INCREMENT PRIMARY KEY,
+    productName varchar(255),
+    categoryID INT,
+    brandID,
+    price decimal,
+    stockQuantity INT,
+    reorderLevel INT,
+    barcode varchar(100),
+    productWeight decimal(10, 2),
+    createdAt timestamp DEFAULT CURRENT_TIMESTAMP,
+    updatedAt timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    imageUrl varchar(255),
+    FOREIGN KEY (categoryID) REFERENCES productCategory(categoryID),
+    FOREIGN KEY (brandID) REFERENCES brand(brandID)
+);
 
 -- Product item table
-create table  productItem(
-    itemID INT AUTO_INCREMENT PRIMARY KEY, 
-    productID INT, 
-    batchNumber	varchar(100), 
-    serialNumber varchar(100), 
-    color varchar(50),
-    quantity_On_Hand INT, 
-    costPrice decimal,
-    salePrice decimal, 
+create table productItem(
+    itemID INT AUTO_INCREMENT PRIMARY KEY,
+    productID INT,
+    batchNumber varchar(100),
+    serialNumber varchar(100),
+    colorID INT,
+    quantity_On_Hand INT,
+    costPrice decimal(10, 2),
+    salePrice decimal(10, 2),
     expiryDate date,
-    createdAt timestamp, 
-    updatedAt timestamp, 
-    status enum('Available', 'Reserved', 'Sold', 'Inactive'));
+    createdAt timestamp DEFAULT CURRENT_TIMESTAMP,
+    updatedAt timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    status enum('Available', 'Reserved', 'Sold', 'Inactive'),
+    FOREIGN KEY (productID) REFERENCES products(productID),
+    FOREIGN KEY (colorID) REFERENCES colors(colorID)
+
+);
 
 -- Brand table
 create table brand(
-    brandID INT AUTO_INCREMENT PRIMARY KEY, 
-    brandName varchar(255), 
-    brandDescription text, 
-    country_Of_Origin varchar(100), 
-    createdAt timestamp, 
-    updatedAt timestamp);
+    brandID INT AUTO_INCREMENT PRIMARY KEY,
+    brandName varchar(255),
+    brandDescription text,
+    country_Of_Origin varchar(100),
+    createdAt timestamp DEFAULT CURRENT_TIMESTAMP,
+    updatedAt timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
 
--- Product variation table 
+-- Product variation table
 create table productVariation(
-    variationID INT AUTO_INCREMENT PRIMARY KEY, 
-    productID INT, 
+    variationID INT AUTO_INCREMENT PRIMARY KEY,
+    productID INT,
     variationName varchar(255),
-    color varchar(50),
+    colorID INT,
     size varchar(50),
     material varchar(100),
     style varchar(100),
-    price decimal(10, 2), 
+    price decimal(10, 2),
     stockQuantity INT,
-    createdAt timestamp, 
-    updatedAt timestamp,
-    status ENUM('Active', 'Inactive'));
+    createdAt timestamp DEFAULT CURRENT_TIMESTAMP,
+    updatedAt timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    status ENUM('Active', 'Inactive'),
+    FOREIGN KEY (productID) REFERENCES products(productID),
+    FOREIGN KEY (colorID) REFERENCES colors(colorID)
+);
 
 -- Size category table
 create table sizeCategory(
     sizeCategoryID INT AUTO_INCREMENT PRIMARY KEY,
-    sizeCategoryName varchar(100), 
+    sizeCategoryName varchar(100),
     unit varchar(50),
-    createdAt timestamp,
-    updatedAt timestamp, 
-    status ENUM('Active', 'Inactive'));
+    createdAt timestamp DEFAULT CURRENT_TIMESTAMP,
+    updatedAt timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    status ENUM('Active', 'Inactive')
+);
 
 -- Size option table
-create table  sizeOption(
-    sizeID INT AUTO_INCREMENT PRIMARY KEY, 
-    sizeCategoryID INT, 
+create table sizeOption(
+    sizeID INT AUTO_INCREMENT PRIMARY KEY,
+    sizeCategoryID INT,
     sizeLabel varchar(50),
-    sizeValue decimal,
-    createdAt timestamp, 
-    updatedAt timestamp, 
-    status ENUM('Active', 'Inactive'));
+    sizeValue decimal(10, 2),
+    createdAt timestamp DEFAULT CURRENT_TIMESTAMP,
+    updatedAt timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    status ENUM('Active', 'Inactive'),
+    FOREIGN KEY (sizeCategoryID) REFERENCES sizeCategory(sizeCategoryID)
+);
 
 -- Product image table
 create table productImage(
     imageID INT AUTO_INCREMENT PRIMARY KEY,
-    productID INT, 
+    productID INT,
     variationID INT,
-    imageURL varchar(255), 
-    altText varchar(255), 
+    imageURL varchar(255),
+    altText varchar(255),
     isPrimary boolean,
-    createdAt timestamp, 
-    updatedAt timestamp, 
-    status ENUM('Active', 'Inactive'));
+    createdAt timestamp DEFAULT CURRENT_TIMESTAMP,
+    updatedAt timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    status ENUM('Active', 'Inactive'),
+    FOREIGN KEY (productID) REFERENCES products(productID),
+    FOREIGN KEY (variationID) REFERENCES productVariation(variationID)
+);
 
 -- Color table
-create table color(
-    colorID INT AUTO_INCREMENT PRIMARY KEY, 
+create table colors(
+    colorID INT AUTO_INCREMENT PRIMARY KEY,
     colorName varchar(100),
-    createdAt timestamp, 
-    updatedAt timestamp, 
-    status ENUM('Active', 'Inactive'));
+    createdAt timestamp DEFAULT CURRENT_TIMESTAMP,
+    updatedAt timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    status ENUM('Active', 'Inactive')
+);
 
 -- Product attribute table
 create table productAttribute(
-    attributeID INT AUTO_INCREMENT PRIMARY KEY, 
-    attributeName varchar(100), 
-    unit varchar(50), 
-    isVariant boolean, 
-    createdAt timestamp,
-    updatedAt timestamp, 
-    status ENUM('Active', 'Inactive'));
+    attributeID INT AUTO_INCREMENT PRIMARY KEY,
+    attributeName varchar(100),
+    unit varchar(50),
+    isVariant boolean,
+    attributeCategoryID INT,
+    attributeTypeID INT,
+    createdAt timestamp DEFAULT CURRENT_TIMESTAMP,
+    updatedAt timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    status ENUM('Active', 'Inactive'),
+    FOREIGN KEY (attributeCategoryID) REFERENCES attributeCategory(attributeCategoryID),
+    FOREIGN KEY (attributeTypeID) REFERENCES attributeType(attributeTypeID)
+
+);
 
 -- Attribute category table
-create table  attributeCategory(
-    attributeCategoryID	INT AUTO_INCREMENT PRIMARY KEY, 
-    categoryName varchar(100), 
-    createdAt timestamp, 
-    updatedAt timestamp, 
-    status ENUM('Active', 'Inactive'));
+create table attributeCategory(
+    attributeCategoryID INT AUTO_INCREMENT PRIMARY KEY,
+    categoryName varchar(100),
+    createdAt timestamp DEFAULT CURRENT_TIMESTAMP,
+    updatedAt timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    status ENUM('Active', 'Inactive')
+);
 
 -- Attribute type table
-create table attributeType (
-    attributeTypeID INT AUTO_INCREMENT PRIMARY KEY, 
-    typeName varchar(100), 
-    createdAt timestamp, 
-    updatedAt timestamp, 
-    status ENUM('Active', 'Inactive'));
+create table attributeType(
+    attributeTypeID INT AUTO_INCREMENT PRIMARY KEY,
+    typeName varchar(100),
+    createdAt timestamp DEFAULT CURRENT_TIMESTAMP,
+    updatedAt timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    status ENUM('Active', 'Inactive')
+);
+
 
 -- inserting sample data into the product table
-insert into products(productName,categoryID,supplierID,price,stockQuantity,reorderLevel, barcode,productWeight,createdAt,updatedAt,imageUrl)
-values("Wireless Mouse", 223, 1112,125.50, 678, 100, 12354645,0.05,"2024-12-01 10:00:00", "2025-01-15 08:30:00","https://cdn.example.com/products/wireless_mouse_front.jp"),
-("Bluetooth Headphones", 123, 1212,150.50, 1000, 250, 11354745,0.5,"2024-12-01 11:00:00", "2025-01-16 08:30:00", "	https://cdn.example.com/products/wireless_mouse_side.jpg"),
-("Cotton T-Shirt", 234, 5612,25.50, 800, 150, 12358945,0.005,"2024-12-06 10:00:00", "2025-01-19 08:30:00","https://cdn.example.com/products/tshirt_white_front.jpg"),
-("Laptop Backpack", 456, 4567,80.50, 300, 50, 11235464,0.80,"2025-02-01 10:00:00", "2025-01-20 08:30:00","https://cdn.example.com/products/backpack_open.jpg"),
-("LED Desk Lamp", 345, 5678,400.00, 457, 120, 14364645,1.00,"2024-12-11 10:00:00", "2025-01-15 08:30:00","https://cdn.example.com/products/desk_lamp_angle.jpg"),
-("Bread", 567, 5678,11.50, 356, 50, 112345,0.65,"2024-12-01 10:00:00", "2025-01-15 08:30:00","https://cdn.example.com/products/bread_packaged.jpg");
+insert into products(productName,categoryID,price,stockQuantity,reorderLevel, barcode,productWeight,createdAt,updatedAt,imageUrl)
+values("Wireless Mouse", 223, 125.50, 678, 100, 12354645,0.05,"2024-12-01 10:00:00", "2025-01-15 08:30:00","https://cdn.example.com/products/wireless_mouse_front.jp"),
+("Bluetooth Headphones", 123, 150.50, 1000, 250, 11354745,0.5,"2024-12-01 11:00:00", "2025-01-16 08:30:00", "	https://cdn.example.com/products/wireless_mouse_side.jpg"),
+("Cotton T-Shirt", 234, 25.50, 800, 150, 12358945,0.005,"2024-12-06 10:00:00", "2025-01-19 08:30:00","https://cdn.example.com/products/tshirt_white_front.jpg"),
+("Laptop Backpack", 456, 80.50, 300, 50, 11235464,0.80,"2025-02-01 10:00:00", "2025-01-20 08:30:00","https://cdn.example.com/products/backpack_open.jpg"),
+("LED Desk Lamp", 345, 400.00, 457, 120, 14364645,1.00,"2024-12-11 10:00:00", "2025-01-15 08:30:00","https://cdn.example.com/products/desk_lamp_angle.jpg"),
+("Bread", 567, 11.50, 356, 50, 112345,0.65,"2024-12-01 10:00:00", "2025-01-15 08:30:00","https://cdn.example.com/products/bread_packaged.jpg");
 
--- -- inserting sample data into the product_category table
+-- -- inserting sample data into the product category table
 
 insert into productCategory(categoryName,createdAt, updatedAt, status)
 values("Electronics","	2024-12-01 10:00:00","2025-01-01 10:00:00","Active"),
@@ -151,7 +179,7 @@ values("Electronics","	2024-12-01 10:00:00","2025-01-01 10:00:00","Active"),
 ("Home & Lighting","2024-12-01 11:30:00","2025-01-01 11:30:00","Active"),
 ("Food & Bakery", "2024-12-01 11:45:00","2025-01-01 11:45:00","Active");
 
--- inserting sample data into the productitem table
+-- inserting sample data into the product item table
 insert into productItem(productID, batchNumber, serialNumber, color, quantity_On_Hand, costPrice, salePrice, expiryDate, createdAt,updatedAt, status)
 values(1, "B-WM-2025-01", "SN-WM001-BLK-0001", "Blue", 301, 12.25, 15.10, null, "2024-12-01 10:00:00", "2025-01-05 08:30:00", "available"),
 (2,"B-TSH-2025-01", "SN-TSH-M-345678", "Green", 450, 7.00, 19.99, null, "2025-01-10 12:00:00", "2025-02-01 10:15:00", "available"),
@@ -240,4 +268,3 @@ values("Weight","2025-04-21 11:10:00","2025-04-21 11:10:00","active"),
 ("RAM","2025-04-21 11:14:00","2025-04-21 11:14:00","active"),
 ("Color finish","2025-04-21 11:15:00","2025-04-21 11:15:00","active"),
 ("Packaging Type","2025-04-21 11:16:00","2025-04-21 11:16:00","active");
-
