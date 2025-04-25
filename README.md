@@ -49,6 +49,17 @@ The schema includes tables covering the following:
 
 ---
 
+## ✅ Features
+
+1. Categorization of products through product categories
+2. Inventory tracking with batch and serial number support
+3. Management of product attributes (e.g., weight, storage) and custom attributes
+4. Support for product variations (e.g., color, size, material)
+5. Multiple images per product and variation
+6. Color and size configuration for filtering and display
+7. Full relational integrity using foreign key constraints
+8. Timestamps for creation and modification tracking
+
 ## 🔄 Data Flow & Relationships
 
 The ERD below shows how entities are interrelated in the system.
